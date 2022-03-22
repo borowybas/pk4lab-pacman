@@ -52,7 +52,9 @@ void zad3a() {
 	std::filesystem::path from = "C:\\Users\\Admin\\Desktop\\Laboratorium3\\to_copy";
 	std::filesystem::path to = "C:\\Users\\Admin\\Desktop\\Laboratorium3\\Zadanie_3_1";
 
-	std::filesystem::copy("C:\\Users\\Admin\\Desktop\\Laboratorium3\\to_copy", "C:\\Users\\Admin\\Desktop\\Laboratorium3\\Zadanie_3_1", std::filesystem::copy_options::recursive);
+	auto const cop_opt = std::filesystem::copy_options::recursive;
+
+	std::filesystem::copy(from, to, cop_opt);
 }
 //kopiuje z to_copy do Zadanie_3_2 pod warunkiem, ¿e kopiowany plik jest nowszy od istniej¹cego
 void zad3b() {
@@ -149,7 +151,7 @@ int main() {
 	
 	//------------Zad 3a-------------------------------
 	
-	//zad3a();
+	zad3a();
 
 	//------------Zad 3b-----------
 	
@@ -169,5 +171,5 @@ int main() {
 
 	//------------Zad 4c-----------
 
-	zad4c();
+	//zad4c();
 }
