@@ -6,7 +6,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(900, 900), "Pac-Man");
+    sf::RenderWindow window(sf::VideoMode(760, 840), "Pac-Man");
     //sf::CircleShape shape(10.f);
    // shape.setFillColor(sf::Color::Yellow);
 
@@ -14,33 +14,41 @@ int main()
     if (!pacman_texture.loadFromFile("C:\\Users\\Admin\\Pictures\\pacman.png")) {
         return 0;
     }
-    sf::Sprite spacman_sprite;
-    spacman_sprite.setTexture(pacman_texture);
+    sf::Sprite pacman_sprite;
+    pacman_sprite.setTexture(pacman_texture);
+    pacman_sprite.setOrigin(20, 20);
+    pacman_sprite.setPosition(20, 20);
 
     GameWorld gameWorld = GameWorld();
 
     while (window.isOpen())
     {
+        
         sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+            auto currentRotation = pacman_sprite.getRotation();
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
                 std::cout << ":-)"<<std::endl;
-                spacman_sprite.move(40, 0);
+                pacman_sprite.rotate(0-currentRotation);
+                pacman_sprite.move(40, 0);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
                 std::cout << ":-(" << std::endl;
-                spacman_sprite.move(-40, 0);
+                pacman_sprite.rotate(180-currentRotation);
+                pacman_sprite.move(-40, 0);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up) {
                 std::cout << ":->" << std::endl;
-                spacman_sprite.move(0, -40);
+                pacman_sprite.rotate(270- currentRotation);
+                pacman_sprite.move(0, -40);
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down) {
                 std::cout << ":-<" << std::endl;
-                spacman_sprite.move(0, 40);
+                pacman_sprite.rotate(90-currentRotation);
+                pacman_sprite.move(0, 40);
             }
 
         }
@@ -53,7 +61,7 @@ int main()
             }
         }
 
-        window.draw(spacman_sprite);
+        window.draw(pacman_sprite);
         window.display();
     }
 
