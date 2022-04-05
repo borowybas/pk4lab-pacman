@@ -27,12 +27,12 @@ int main()
 	*/
 	std::cout << "Zad.1\n";
 
-	std::cout << "a)\n";
+	std::cout << "a) ";
 
 	std::vector<int> num = { 10, 13, 6, 7, 4, 5 };
 
 	std::future<int> fu = std::async(std::launch::async, add_all, num);
-	std::cout << fu.get() << std::endl;
+	std::cout << fu.get() << "\n\n";
 
 	std::cout << "b)\n";
 	std::cout << "AABCCC\n";
@@ -51,18 +51,21 @@ int main()
 	std::cout << std::endl << elapsed << std::endl;
 
 	std::cout << "\nBBBBAC\n";
-
-	start = std::chrono::high_resolution_clock::now();
-
-	//Tu wpisz rozwiazanie
-	std::chrono::milliseconds span(4000);
-	std::chrono::milliseconds span1(3000);
-	
+	/*	//v_1
 	std::future<void>  f1 = std::async(std::launch::deferred, printA, 1);
-	f1.wait_for(span1);
 	std::future<void>  f2 = std::async(std::launch::deferred, printB, 4);
 	std::future<void>  f3 = std::async(std::launch::deferred, printC, 1);
-	f3.wait_for(span);
+
+	f2.get();
+	f1.get();
+	f3.get();*/
+	start = std::chrono::high_resolution_clock::now();
+
+	//Tu wpisz rozwiazanie v_2
+	std::future<void>  f1 = std::async(std::launch::async, printA, 1);
+	std::future<void>  f2 = std::async(std::launch::async, printB, 4);
+	Sleep(550);
+	std::future<void>  f3 = std::async(std::launch::async, printC, 1);
 
 	f2.get();
 	f1.get();
@@ -78,15 +81,10 @@ int main()
 
 	//Tu wpisz rozwiazanie
 
-	std::chrono::milliseconds s(500);
-	std::chrono::milliseconds s1(3500);
-
 	std::future<void>  fu1 = std::async(std::launch::deferred, printA, 2);
-	fu1.wait_for(s1);
 	std::future<void>  fu2 = std::async(std::launch::deferred, printB, 4);
-	fu2.wait_for(s);
 	std::future<void>  fu3 = std::async(std::launch::deferred, printC, 1);
-
+	
 	fu3.get();
 	fu2.get();
 	fu1.get();
@@ -102,7 +100,7 @@ int main()
 	b)Tworząc tylko po jednym packaged_task dla każdej funkcji print, wyswietl następujace ciągi: AACBA,BBCCAABC,CBABC. (dla 1 ciagu) lacznie 9
 	*/
 	std::cout << "\nZad_2\n";
-	std::cout << "a)\n";
+	std::cout << "a) ";
 
 	//Tu wpisz rozwiazanie
 	std::packaged_task<int(int, int)> pt_add(add);
@@ -112,7 +110,7 @@ int main()
 	pt_sub(y, x);
 	pt_add(x, futu1.get());
 
-	std::cout << futu.get();
+	std::cout << futu.get() << "\n";
 
 	std::cout << "\nb)\n";
 	std::cout << "AACBA\n";
@@ -182,14 +180,14 @@ int main()
 	Skorzystaj z promise.
 	*/
 
-	std::cout << "\nZad_3\n";
+	std::cout << "\n\nZad_3\n";
 	std::vector<double>oceny = { 2, 5, 3, 3, 4, 5, 2 };
 	std::vector<double>wagi = { 4, 2, 3, 4, 4, 3, 2 };
 
 	std::promise<double> prom;
 	std::future<double> fu_last = prom.get_future();
 	std::thread th(avg, oceny, wagi, std::move(prom));
-	std::cout << fu_last.get();
+	std::cout << fu_last.get()<< "\n";
 	th.join();
 }
 
