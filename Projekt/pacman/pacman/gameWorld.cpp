@@ -1,10 +1,62 @@
 #include "gameWorld.h"
 
+void GameWorld::initVariables() {
+	this->endGame = false;
+}
+
+void GameWorld::initWindow() {
+	this->videomode = sf::VideoMode(760, 840);
+	this->window = new sf::RenderWindow (this->videomode, "Pac-Man", sf::Style::Close | sf::Style::Titlebar);
+}
+
+GameWorld::~GameWorld() {
+	delete this->window;
+}
+
+void GameWorld::pollEvents()
+{
+	while (this->window->pollEvent(this->myEvent)) {
+		if (this->myEvent.type == sf::Event::Closed) {
+			this->window->close();
+		}
+	}
+}
+
+void GameWorld::render()
+{
+	this->window->clear();
+
+	//render
+	this->drawTiles();
+	this->pacman.render(this->window);
+
+	this->window->display();
+}
+
+void GameWorld::update()
+{
+	this->pollEvents();//do zamkniecia
+
+	if (this->runing()) {//(this->endGame == false
+		this->updatePlayer();
+	}
+}
+
+void GameWorld::updatePlayer()
+{
+	this->pacman.update();
+}
+
 GameWorld::GameWorld() {
+	this->initVariables();
+	this->initWindow();
+
 	gridLength = 19;
 	gridHeight = 21;
 	setUpInitialState();
 	setUpTiles();
+	drawTiles();
+	this->window->setFramerateLimit(60);
 }
 
 void GameWorld::setUpInitialState() {
@@ -60,4 +112,14 @@ void GameWorld::setUpTiles() {
 	}
 
 	
+}
+
+void GameWorld::drawTiles()
+{
+	for (int i = 0; i < 21; i++) {
+		for (int j = 0; j < 19; j++) {
+		    this->window->draw(this->tiles[i][j]->tile_sprite);
+		}
+	}
+
 }
