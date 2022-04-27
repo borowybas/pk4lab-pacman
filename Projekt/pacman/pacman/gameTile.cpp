@@ -10,11 +10,9 @@ GameTile::GameTile(std::string textureName, float x, float y, bool passable) {
 }
 
 bool GameTile::setUpSprite(std::string textureName) {
-  //textureName = "C:\\Users\\Admin\\Pictures\\tile.png"
+  
     if (tile_texture.loadFromFile(textureName)) {
         tile_sprite.setTexture(tile_texture);
     }
-    //sf::Sprite spacman_sprite;
-
-
+    
 }

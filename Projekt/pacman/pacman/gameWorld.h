@@ -16,7 +16,6 @@ class GameWorld {
 
 	Pacman pacman;
 	//bool isRunning;
-
 	sf::VideoMode videomode;
 	sf::RenderWindow* window;
 	sf::Event myEvent;
@@ -24,18 +23,16 @@ class GameWorld {
 	void initVariables();
 	void initWindow();
 public:
-
 	std::vector < std::vector<GameTile*>> tiles;
-	int gridLength;
-	int gridHeight;
+	//int gridLength;
+	//int gridHeight;
 	GameWorld();
 	~GameWorld();
-	void pollEvents();
-	void handleEvents();
+	void pollEvents();//check if window is closed
+	//void handleEvents();
 	void update();
 	void updatePlayer();
 	void render();
-	void clean();
 	const bool runing() const { return this->window->isOpen(); };
 };
 

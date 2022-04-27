@@ -45,11 +45,6 @@ Pacman::~Pacman()
 
 }
 
-void Pacman::setRotation()
-{
-	this->currentRotation = this->pacman_sprite.getRotation();
-}
-
 void Pacman::update()
 {
 	this->setDirection();
