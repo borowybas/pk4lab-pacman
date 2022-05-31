@@ -16,3 +16,8 @@ bool GameTile::setUpSprite(std::string textureName) {
     }
     
 }
+
+const sf::Sprite& GameTile::getSprite() const
+{
+    return this->tile_sprite;
+}

@@ -14,7 +14,7 @@ class GameWorld {
 	void setUpTiles();
 	void drawTiles();
 
-	Pacman pacman;
+	//Pacman pacman;
 	//bool isRunning;
 	sf::VideoMode videomode;
 	sf::RenderWindow* window;
@@ -23,13 +23,18 @@ class GameWorld {
 	void initVariables();
 	void initWindow();
 public:
-	std::vector < std::vector<GameTile*>> tiles;
+	std::vector < std::vector<GameTile*>> tiles; //map elements
 	//int gridLength;
 	//int gridHeight;
 	GameWorld();
 	~GameWorld();
 	void pollEvents();//check if window is closed
 	//void handleEvents();
+	sf::RectangleShape mapColEl1;
+	void setMapColPos();
+	Pacman pacman;
+	void updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB);
+
 	void update();
 	void updatePlayer();
 	void render();

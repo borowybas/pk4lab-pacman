@@ -12,15 +12,19 @@ public:
 	};
 	Direction_e spriteDirection;
 
-	float speed = 5;
+	//float speed = 5;
 	//sf::Vector2f velocity;
 	sf::Vector2f position;
 	sf::Sprite pacman_sprite;
+	sf::RectangleShape pacmanCollision;
 	sf::Texture pacman_texture;
 	int spriteAngle;
 	void setDirection();
 	Pacman();
 	~Pacman();
+
+	const sf::Sprite& getSprite() const;
+
 	//void initPacman();
 	void update();
 	void updateInput();//strzalki

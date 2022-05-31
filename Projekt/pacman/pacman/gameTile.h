@@ -14,6 +14,7 @@ public:
 	GameTile(std::string, float, float, bool);
 	bool setUpSprite(std::string);
 
+	const sf::Sprite& getSprite() const;//moze tu polimorfizm z pacmanem??
 };
 
 #endif
