@@ -102,7 +102,7 @@ void GameWorld::pollEvents()
 
 void GameWorld::setMapColPos()
 {
-	mapColEl1.setPosition(380, 40); //360+20
+	mapColEl1.setPosition(380, 60); //360+20
 	sf::Vector2f size1;
 	size1.x = 40; size1.y = 80;
 	mapColEl1.setSize(size1);
@@ -112,10 +112,10 @@ void GameWorld::setMapColPos()
 void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB)
 {
 	if ( this->pacman.xVelocity != 0 && 
-		rectA.getPosition().x + rectA.getSize().x + 3 >= rectB.getPosition().x &&
-		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x -3 &&
-		rectA.getPosition().y + rectA.getSize().y >= rectB.getPosition().y &&
-		rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y
+		rectA.getPosition().x + rectA.getSize().x + 3 >= rectB.getPosition().x && //->
+		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x -3 && //<-
+		rectA.getPosition().y + rectA.getSize().y -3 >= rectB.getPosition().y &&
+		rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y +3
 		
 		) {
 		this->pacman.xVelocity = 0;
@@ -123,11 +123,12 @@ void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::Recta
 		
 		//std::cout << "collision x";
 	}
-	else if (this->pacman.yVelocity != 0 &&
+	else
+		if (this->pacman.yVelocity != 0 &&
 			rectA.getPosition().y + rectA.getSize().y +3 >= rectB.getPosition().y &&
 			rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y -3 &&
-		rectA.getPosition().x + rectA.getSize().x >= rectB.getPosition().x &&
-		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x
+		rectA.getPosition().x + rectA.getSize().x -3 >= rectB.getPosition().x &&
+		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x +3 
 		){
 
 		//std::cout << "collision y";

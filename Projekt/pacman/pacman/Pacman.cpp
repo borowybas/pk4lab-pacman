@@ -34,7 +34,7 @@ Pacman::Pacman()//init var, init shape, set pos
 		this->pacman_sprite.setOrigin(20, 20);
 		this->pacman_sprite.setPosition(position);
 		this->spriteAngle = 0;
-		sf::Vector2f pacmanSize; pacmanSize.x = 38; pacmanSize.y = 38;
+		sf::Vector2f pacmanSize; pacmanSize.x = 40; pacmanSize.y = 40;
 		this->pacmanCollision.setSize(pacmanSize);
 		//this->pacmanCollision.setOrigin(-20, -20);
 }
