@@ -1,9 +1,17 @@
 #include "gameWorld.h"
 #include <iostream>
+#include <thread>
+#include <ranges>
+
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <chrono>
+#include <numeric>
+
 void GameWorld::setUpInitialState() {
 	pacmanPos = sf::Vector2i(0, 0);
 }
-
 
 void GameWorld::setUpTiles() {
 	tiles.clear();
@@ -82,7 +90,8 @@ GameWorld::GameWorld() {
 	setUpTiles();
 	drawTiles();
 	this->window->setFramerateLimit(60);
-	setMapColPos();
+	//setMapColPos();
+	setUpCollisionVector();
 }
 
 GameWorld::~GameWorld() {
@@ -102,13 +111,292 @@ void GameWorld::pollEvents()
 
 void GameWorld::setMapColPos()
 {
-	mapColEl1.setPosition(380, 60); //360+20
-	sf::Vector2f size1;
-	size1.x = 40; size1.y = 80;
-	mapColEl1.setSize(size1);
+	sf::RectangleShape tempShape;
+	sf::Vector2f size;
 
+	tempShape.setPosition(20, 20); //1
+	size.x = 760; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//2
+	tempShape.setPosition(380, 60); //360+20
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//3
+	tempShape.setPosition(20, 60); 
+	size.x = 40; size.y = 200;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//4
+	tempShape.setPosition(100, 100);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//5
+	tempShape.setPosition(220, 100);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//6
+	tempShape.setPosition(460, 100);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//7
+	tempShape.setPosition(620, 100);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//8
+	tempShape.setPosition(740, 60);
+	size.x = 40; size.y = 200;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//9
+	tempShape.setPosition(100, 180);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//10
+	tempShape.setPosition(220, 180);
+	size.x = 40; size.y = 200;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//11
+	tempShape.setPosition(300, 180);
+	size.x = 200; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//12
+	tempShape.setPosition(540, 180);
+	size.x = 40; size.y = 200;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//13
+	tempShape.setPosition(620, 180);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//14
+	tempShape.setPosition(380, 220);
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//15
+	tempShape.setPosition(20, 260);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//16
+	tempShape.setPosition(140, 260);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//17
+	tempShape.setPosition(260, 260);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//18
+	tempShape.setPosition(460, 260);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//19
+	tempShape.setPosition(620, 260);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//20
+	tempShape.setPosition(660, 260);
+	size.x = 120; size.y = 40 ;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//21
+	tempShape.setPosition(20, 340);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//22
+	tempShape.setPosition(300, 340);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//23
+	tempShape.setPosition(340, 340);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//24
+	tempShape.setPosition(460, 340);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//25
+	tempShape.setPosition(660, 340);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	//26
+	tempShape.setPosition(20, 420);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements1.push_back(tempShape);
+	
 }
 
+void GameWorld::setMapColPos2()
+{
+	sf::RectangleShape tempShape;
+	sf::Vector2f size;
+	//27
+	tempShape.setPosition(140, 420);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//28
+	tempShape.setPosition(220, 420);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//29
+	tempShape.setPosition(340, 420);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//30
+	tempShape.setPosition(540, 420);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//31
+	tempShape.setPosition(620, 420);
+	size.x = 40; size.y = 120;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//32
+	tempShape.setPosition(660, 420);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//33
+	tempShape.setPosition(20, 500);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//34
+	tempShape.setPosition(300, 500);
+	size.x = 200; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//35
+	tempShape.setPosition(660, 500);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//36
+	tempShape.setPosition(20, 540);
+	size.x = 40; size.y = 320;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//37
+	tempShape.setPosition(380, 540);
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//38
+	tempShape.setPosition(740, 540);
+	size.x = 40; size.y = 320;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//39
+	tempShape.setPosition(100, 580);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//40
+	tempShape.setPosition(220, 580);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//41
+	tempShape.setPosition(460, 580);
+	size.x = 120; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//42
+	tempShape.setPosition(620, 580);
+	size.x = 80; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//43
+	tempShape.setPosition(140, 620);
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//44
+	tempShape.setPosition(620, 620);
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//45
+	tempShape.setPosition(60, 660);
+	size.x = 40; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//46
+	tempShape.setPosition(220, 680);
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//47
+	tempShape.setPosition(300, 660);
+	size.x = 200; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//48
+	tempShape.setPosition(540, 680);
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//49
+	tempShape.setPosition(700, 660);
+	size.x = 40; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//50
+	tempShape.setPosition(380, 700);
+	size.x = 40; size.y = 80;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//51
+	tempShape.setPosition(100, 740);
+	size.x = 240; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//52
+	tempShape.setPosition(460, 740);
+	size.x = 240; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+	//53
+	tempShape.setPosition(20, 820);
+	size.x = 760; size.y = 40;
+	tempShape.setSize(size);
+	colElements2.push_back(tempShape);
+}
+
+void GameWorld::setUpCollisionVector()
+{
+	std::thread th1(&GameWorld::setMapColPos, this);
+	std::thread th2(&GameWorld::setMapColPos2, this);
+
+	th1.join(); th2.join();
+	colElements1.insert(colElements1.end(), colElements2.begin(), colElements2.end());
+	//std::ranges::merge(colElements1, colElements1, std::back_inserter(mapCollisionElements));
+
+}
 void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB)
 {
 	if ( this->pacman.xVelocity != 0 && 
@@ -168,7 +456,9 @@ void GameWorld::update()
 		//nextPosition.setPosition(this->pacman.pacmanCollision.getPosition().x + offset_x, this->pacman.pacmanCollision.getPosition().y + offset_y);
 		//this->updateCollision(nextPosition, this->mapColEl1);
 
-		this->updateCollision(this->pacman.pacmanCollision, this->mapColEl1);
+		for (int i = 0; i <= colElements1.size(); i++) {
+			this->updateCollision(this->pacman.pacmanCollision, this->colElements1[i]);
+		}
 		this->updatePlayer();
 	}
 }

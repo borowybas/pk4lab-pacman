@@ -33,8 +33,9 @@ Pacman::Pacman()//init var, init shape, set pos
 		this->pacman_sprite.setTexture(pacman_texture);
 		this->pacman_sprite.setOrigin(20, 20);
 		this->pacman_sprite.setPosition(position);
+		this->pacman_sprite.scale(0.875, 0.875);
 		this->spriteAngle = 0;
-		sf::Vector2f pacmanSize; pacmanSize.x = 40; pacmanSize.y = 40;
+		sf::Vector2f pacmanSize; pacmanSize.x = 35; pacmanSize.y = 35;
 		this->pacmanCollision.setSize(pacmanSize);
 		//this->pacmanCollision.setOrigin(-20, -20);
 }
@@ -74,7 +75,7 @@ void Pacman::updateInput()
 
 		this->yVelocity = 3;
 	}
-	std::cout << this->xVelocity<<" ";
+	//std::cout << this->xVelocity<<" ";
 	switch (this->spriteDirection) {
 	case LEFT:
 		this->position.x -= this->xVelocity;

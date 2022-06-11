@@ -31,7 +31,12 @@ public:
 	void pollEvents();//check if window is closed
 	//void handleEvents();
 	sf::RectangleShape mapColEl1;
+	std::vector<sf::RectangleShape> mapCollisionElements;
+	std::vector<sf::RectangleShape> colElements1;
+	std::vector<sf::RectangleShape> colElements2;
 	void setMapColPos();
+	void setMapColPos2();
+	void setUpCollisionVector();
 	Pacman pacman;
 	void updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB);
 
