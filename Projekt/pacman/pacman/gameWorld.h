@@ -4,7 +4,7 @@
 #include "gameTile.h"
 #include "Pacman.h"
 #include <vector>
-
+#include "Point.h"
 #ifndef GAMEWORLD_H
 #define GAMEWORLD_H
 
@@ -39,7 +39,9 @@ public:
 	void setUpCollisionVector();
 	Pacman pacman;
 	void updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB);
-
+	std::vector<sf::RectangleShape> foodRectangles;
+	void createFoodRectangles();
+	void updateEating(const sf::RectangleShape& rectA);
 	void update();
 	void updatePlayer();
 	void render();

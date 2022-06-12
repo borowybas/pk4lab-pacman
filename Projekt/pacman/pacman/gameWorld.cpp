@@ -1,7 +1,7 @@
 #include "gameWorld.h"
 #include <iostream>
 #include <thread>
-#include <ranges>
+//#include <ranges>
 
 #include <vector>
 #include <algorithm>
@@ -42,7 +42,8 @@ void GameWorld::setUpTiles() {
 		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },//v
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 	};
-
+	/*sf::RectangleShape tempShape;
+	sf::Vector2f size;*/
 	for (int row = 0; row < 21; row++) {
 		std::vector<GameTile* > wholeRow;
 		int y = row * 40;
@@ -53,7 +54,12 @@ void GameWorld::setUpTiles() {
 				wholeRow.push_back(new GameTile("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images\\blueTile.png", x, y, false));
 			}
 			else if (arr[row][col] == 1) {
-				wholeRow.push_back(new GameTile("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images\\blackTile.png", x, y, true));
+				wholeRow.push_back(new Point("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images\\point.png", x, y, true));
+				
+				//tempShape.setPosition(x, y); //1
+				//size.x = 40; size.y = 40;
+				//tempShape.setSize(size);
+				//foodRectangles.push_back(tempShape);
 			}
 
 		}
@@ -64,11 +70,11 @@ void GameWorld::setUpTiles() {
 void GameWorld::drawTiles()
 {
 	for (int i = 0; i < 21; i++) {
-		for (int j = 0; j < 19; j++) {
-			this->window->draw(this->tiles[i][j]->tile_sprite);
+		for (int j = 0; j < 19; j++) {//if eaten ==false 
+			if(this->tiles[i][j]->eaten == false)
+				this->window->draw(this->tiles[i][j]->tile_sprite);
 		}
 	}
-
 }
 
 void GameWorld::initVariables() {
@@ -106,8 +112,6 @@ void GameWorld::pollEvents()
 		}
 	}
 }
-
-
 
 void GameWorld::setMapColPos()
 {
@@ -407,17 +411,14 @@ void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::Recta
 		
 		) {
 		this->pacman.xVelocity = 0;
-
-		
 		//std::cout << "collision x";
 	}
-	else
-		if (this->pacman.yVelocity != 0 &&
+	else if (this->pacman.yVelocity != 0 &&
 			rectA.getPosition().y + rectA.getSize().y +3 >= rectB.getPosition().y &&
 			rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y -3 &&
-		rectA.getPosition().x + rectA.getSize().x -3 >= rectB.getPosition().x &&
-		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x +3 
-		){
+			rectA.getPosition().x + rectA.getSize().x -3 >= rectB.getPosition().x &&
+			rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x +3 
+			){
 
 		//std::cout << "collision y";
 		this->pacman.yVelocity = 0;
@@ -434,6 +435,57 @@ void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::Recta
 	//	}
 	//}
 
+}
+
+void GameWorld::createFoodRectangles()
+{
+	//std::vector < std::vector<GameTile*>> tiles;
+
+}
+
+void GameWorld::updateEating(const sf::RectangleShape& rectA)
+{//std::vector < std::vector<GameTile*>> tiles;
+	sf::RectangleShape tempShape;
+	sf::Vector2f size(40, 40);
+	//size.x = 40; size.y = 40;
+	tempShape.setSize(size);
+	for (int row = 1; row < 20; row++) {
+		for (int col = 0; col < 19; col++) {
+			
+			if (this->tiles[row][col]->isFood && this->tiles[row][col]->eaten == false) {//jeœli jest niezjedzonym jedzeniem
+				tempShape.setPosition(col*40 + 20, row*40 + 20);
+				foodRectangles.push_back(tempShape);
+				//sprawdŸ kolizjê
+
+				if (rectA.getPosition().x + rectA.getSize().x  >= tempShape.getPosition().x && //->
+					tempShape.getPosition().x + tempShape.getSize().x >= rectA.getPosition().x && //<-
+					rectA.getPosition().y + rectA.getSize().y  >= tempShape.getPosition().y &&
+					tempShape.getPosition().y + tempShape.getSize().y >= rectA.getPosition().y 
+					) {
+					this->tiles[row][col]->eaten = true;
+				}
+
+			}
+		}
+		
+	}
+
+	//if (this->pacman.xVelocity != 0 &&
+	//	rectA.getPosition().x + rectA.getSize().x + 3 >= rectB.getPosition().x && //->
+	//	rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x - 3 && //<-
+	//	rectA.getPosition().y + rectA.getSize().y - 3 >= rectB.getPosition().y &&
+	//	rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y + 3
+	//	) {
+	//	this->pacman.xVelocity = 0;
+	//}
+	//else if (this->pacman.yVelocity != 0 &&
+	//	rectA.getPosition().y + rectA.getSize().y + 3 >= rectB.getPosition().y &&
+	//	rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y - 3 &&
+	//	rectA.getPosition().x + rectA.getSize().x - 3 >= rectB.getPosition().x &&
+	//	rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x + 3
+	//	) {
+	//	this->pacman.yVelocity = 0;
+	//}
 }
 
 void GameWorld::update()
@@ -460,6 +512,7 @@ void GameWorld::update()
 			this->updateCollision(this->pacman.pacmanCollision, this->colElements1[i]);
 		}
 		this->updatePlayer();
+		this->updateEating(this->pacman.pacmanCollision);//update eating
 	}
 }
 

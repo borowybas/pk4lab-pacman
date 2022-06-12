@@ -5,6 +5,8 @@ GameTile::GameTile(std::string textureName, float x, float y, bool passable) {
         pos = sf::Vector2f(x, y);
         tile_sprite.setPosition(pos);
         isPassable = passable;
+        this->isFood = false;
+        this->eaten = false;
     }
         
 }
