@@ -5,6 +5,7 @@
 #include "Pacman.h"
 #include <vector>
 #include "Point.h"
+#include <atomic>
 #ifndef GAMEWORLD_H
 #define GAMEWORLD_H
 
@@ -40,12 +41,16 @@ public:
 	Pacman pacman;
 	void updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB);
 	std::vector<sf::RectangleShape> foodRectangles;
+	std::atomic<int> score = 0;
 	void createFoodRectangles();
 	void updateEating(const sf::RectangleShape& rectA);
 	void update();
 	void updatePlayer();
 	void render();
 	const bool runing() const { return this->window->isOpen(); };
+	sf::Font font;
+	sf::Text text;
+	void updateDisplayScore();
 };
 
 #endif

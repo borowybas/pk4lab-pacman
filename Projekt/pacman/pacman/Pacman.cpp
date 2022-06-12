@@ -99,6 +99,17 @@ void Pacman::updateInput()
 void Pacman::movePlayer()
 {
 		this->pacman_sprite.setPosition(position);
+		//przechodzenie przez ekran
+
+		//if (rectA.getPosition().x + rectA.getSize().x + 3 >= rectB.getPosition().x && //->
+		//	rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x - 3 && //<-
+		//	rectA.getPosition().y + rectA.getSize().y - 3 >= rectB.getPosition().y &&
+		//	rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y + 3
+
+		//	) {
+		//	this->pacman.xVelocity = 0;
+		//	//std::cout << "collision x";
+		//}
 }
 
 void Pacman::render(sf::RenderTarget* target)

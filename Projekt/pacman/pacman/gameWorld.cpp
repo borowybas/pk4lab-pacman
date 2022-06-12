@@ -98,6 +98,13 @@ GameWorld::GameWorld() {
 	this->window->setFramerateLimit(60);
 	//setMapColPos();
 	setUpCollisionVector();
+	font.loadFromFile("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\joystix monospace.ttf");
+	this->text.setFont(this->font);
+	/*int i = 10;
+	std::string str = std::to_string(i);
+	text.setString(str);*/
+	std::string str = std::to_string(this->score);
+		text.setString(str);
 }
 
 GameWorld::~GameWorld() {
@@ -463,6 +470,7 @@ void GameWorld::updateEating(const sf::RectangleShape& rectA)
 					tempShape.getPosition().y + tempShape.getSize().y >= rectA.getPosition().y 
 					) {
 					this->tiles[row][col]->eaten = true;
+					this->score += 10;
 				}
 
 			}
@@ -513,6 +521,8 @@ void GameWorld::update()
 		}
 		this->updatePlayer();
 		this->updateEating(this->pacman.pacmanCollision);//update eating
+		//update score
+		this->updateDisplayScore();
 	}
 }
 
@@ -528,6 +538,13 @@ void GameWorld::render()
 	//render
 	this->drawTiles();
 	this->pacman.render(this->window);
+	this->window->draw(text);
 
 	this->window->display();
+}
+
+void GameWorld::updateDisplayScore()
+{
+	std::string str = std::to_string(this->score);
+	text.setString(str);
 }
