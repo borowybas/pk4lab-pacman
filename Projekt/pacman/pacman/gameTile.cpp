@@ -15,8 +15,9 @@ bool GameTile::setUpSprite(std::string textureName) {
   
     if (tile_texture.loadFromFile(textureName)) {
         tile_sprite.setTexture(tile_texture);
+        return true;
     }
-    
+    return false;
 }
 
 const sf::Sprite& GameTile::getSprite() const

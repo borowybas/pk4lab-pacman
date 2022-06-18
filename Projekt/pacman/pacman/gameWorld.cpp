@@ -2,7 +2,7 @@
 #include <iostream>
 #include <thread>
 //#include <ranges>
-
+#include <regex>
 #include <vector>
 #include <algorithm>
 #include <random>
@@ -42,8 +42,27 @@ void GameWorld::setUpTiles() {
 		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },//v
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 	};
-	/*sf::RectangleShape tempShape;
-	sf::Vector2f size;*/
+	std::string bluePath;
+	std::string pointPath;
+	std::string blackPath;
+	this->path = "C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images";
+	std::regex blueReg("blu[a-zA-Z]+", std::regex_constants::icase);
+	std::regex blackReg("bla[a-zA-Z]+", std::regex_constants::icase);
+	std::regex pointReg("p[a-zA-Z]+", std::regex_constants::icase);
+	
+	for (auto& p1 : std::filesystem::directory_iterator(this->path)) {
+		if (std::regex_match(p1.path().stem().string(), blueReg)) {
+			bluePath = p1.path().string();
+		}
+		else if (std::regex_match(p1.path().stem().string(), blackReg)) {
+			blackPath = p1.path().string();
+		}
+		else if (std::regex_match(p1.path().stem().string(), pointReg)) {
+			pointPath = p1.path().string();
+		}
+	}
+
+
 	for (int row = 0; row < 21; row++) {
 		std::vector<GameTile* > wholeRow;
 		int y = row * 40;
@@ -51,10 +70,10 @@ void GameWorld::setUpTiles() {
 			int x = col * 40;
 
 			if (arr[row][col] == 0) {
-				wholeRow.push_back(new GameTile("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images\\blueTile.png", x, y, false));
+				wholeRow.push_back(new GameTile(bluePath, x, y, false));
 			}
 			else if (arr[row][col] == 1) {
-				wholeRow.push_back(new Point("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images\\point.png", x, y, true));
+				wholeRow.push_back(new Point(pointPath, x, y, true));
 				
 				//tempShape.setPosition(x, y); //1
 				//size.x = 40; size.y = 40;
@@ -464,10 +483,10 @@ void GameWorld::updateEating(const sf::RectangleShape& rectA)
 				foodRectangles.push_back(tempShape);
 				//sprawdŸ kolizjê
 
-				if (rectA.getPosition().x + rectA.getSize().x  >= tempShape.getPosition().x && //->
-					tempShape.getPosition().x + tempShape.getSize().x >= rectA.getPosition().x && //<-
-					rectA.getPosition().y + rectA.getSize().y  >= tempShape.getPosition().y &&
-					tempShape.getPosition().y + tempShape.getSize().y >= rectA.getPosition().y 
+				if (rectA.getPosition().x + rectA.getSize().x - 20>= tempShape.getPosition().x && //->
+					tempShape.getPosition().x + tempShape.getSize().x >= rectA.getPosition().x + 20&& //<-
+					rectA.getPosition().y + rectA.getSize().y - 20>= tempShape.getPosition().y &&
+					tempShape.getPosition().y + tempShape.getSize().y >= rectA.getPosition().y + 20
 					) {
 					this->tiles[row][col]->eaten = true;
 					this->score += 10;

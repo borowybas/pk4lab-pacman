@@ -6,6 +6,7 @@
 #include <vector>
 #include "Point.h"
 #include <atomic>
+#include <filesystem>
 #ifndef GAMEWORLD_H
 #define GAMEWORLD_H
 
@@ -50,6 +51,7 @@ public:
 	const bool runing() const { return this->window->isOpen(); };
 	sf::Font font;
 	sf::Text text;
+	std::filesystem::path path;
 	void updateDisplayScore();
 };
 
