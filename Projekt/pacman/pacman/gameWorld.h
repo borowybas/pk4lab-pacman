@@ -26,12 +26,9 @@ class GameWorld {
 	void initWindow();
 public:
 	std::vector < std::vector<GameTile*>> tiles; //map elements
-	//int gridLength;
-	//int gridHeight;
 	GameWorld();
 	~GameWorld();
 	void pollEvents();//check if window is closed
-	//void handleEvents();
 	sf::RectangleShape mapColEl1;
 	std::vector<sf::RectangleShape> mapCollisionElements;
 	std::vector<sf::RectangleShape> colElements1;
@@ -43,7 +40,6 @@ public:
 	void updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB);
 	std::vector<sf::RectangleShape> foodRectangles;
 	std::atomic<int> score = 0;
-	void createFoodRectangles();
 	void updateEating(const sf::RectangleShape& rectA);
 	void update();
 	void updatePlayer();

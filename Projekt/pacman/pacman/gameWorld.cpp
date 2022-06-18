@@ -1,13 +1,9 @@
 #include "gameWorld.h"
 #include <iostream>
 #include <thread>
-//#include <ranges>
 #include <regex>
 #include <vector>
-#include <algorithm>
-#include <random>
 #include <chrono>
-#include <numeric>
 
 void GameWorld::setUpInitialState() {
 	pacmanPos = sf::Vector2i(0, 0);
@@ -15,9 +11,6 @@ void GameWorld::setUpInitialState() {
 
 void GameWorld::setUpTiles() {
 	tiles.clear();
-	//std::vector< GameTile*> firstRow;
-	//firstRow.push_back(new GameTile("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images\\blueTile.png", 0,0,false));
-
 	//////// y   x
 	const int arr[21][19] = {
 		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },//
@@ -39,8 +32,8 @@ void GameWorld::setUpTiles() {
 		{ 0,0,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,0,0 },//
 		{ 0,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,0 },//
 		{ 0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0 },//
-		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },//v
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
 	};
 	std::string bluePath;
 	std::string pointPath;
@@ -62,7 +55,6 @@ void GameWorld::setUpTiles() {
 		}
 	}
 
-
 	for (int row = 0; row < 21; row++) {
 		std::vector<GameTile* > wholeRow;
 		int y = row * 40;
@@ -74,13 +66,7 @@ void GameWorld::setUpTiles() {
 			}
 			else if (arr[row][col] == 1) {
 				wholeRow.push_back(new Point(pointPath, x, y, true));
-				
-				//tempShape.setPosition(x, y); //1
-				//size.x = 40; size.y = 40;
-				//tempShape.setSize(size);
-				//foodRectangles.push_back(tempShape);
 			}
-
 		}
 		tiles.push_back(wholeRow);
 	}
@@ -89,7 +75,7 @@ void GameWorld::setUpTiles() {
 void GameWorld::drawTiles()
 {
 	for (int i = 0; i < 21; i++) {
-		for (int j = 0; j < 19; j++) {//if eaten ==false 
+		for (int j = 0; j < 19; j++) {
 			if(this->tiles[i][j]->eaten == false)
 				this->window->draw(this->tiles[i][j]->tile_sprite);
 		}
@@ -109,7 +95,6 @@ GameWorld::GameWorld() {
 	this->initVariables();
 	this->initWindow();
 
-
 	setUpInitialState();
 	setUpTiles();
 	drawTiles();
@@ -124,6 +109,12 @@ GameWorld::GameWorld() {
 }
 
 GameWorld::~GameWorld() {
+	for (std::vector<GameTile*> vec : this->tiles) {
+		for (GameTile* element : vec) {
+			delete element;
+		}
+	}
+	this->tiles.clear();
 	delete this->window;
 }
 
@@ -421,7 +412,6 @@ void GameWorld::setUpCollisionVector()
 
 	th1.join(); th2.join();
 	colElements1.insert(colElements1.end(), colElements2.begin(), colElements2.end());
-	//std::ranges::merge(colElements1, colElements1, std::back_inserter(mapCollisionElements));
 
 }
 void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB)
@@ -431,10 +421,8 @@ void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::Recta
 		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x -3 && //<-
 		rectA.getPosition().y + rectA.getSize().y -3 >= rectB.getPosition().y &&
 		rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y +3
-		
 		) {
 		this->pacman.xVelocity = 0;
-		//std::cout << "collision x";
 	}
 	else if (this->pacman.yVelocity != 0 &&
 			rectA.getPosition().y + rectA.getSize().y +3 >= rectB.getPosition().y &&
@@ -442,35 +430,20 @@ void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::Recta
 			rectA.getPosition().x + rectA.getSize().x -3 >= rectB.getPosition().x &&
 			rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x +3 
 			){
-
-		//std::cout << "collision y";
 		this->pacman.yVelocity = 0;
 	}
-
-	//for (int row = 0; row < 21; row++) {
-	//	for (int col = 0; col < 19; col++) {
-	//		if (this->pacman.getSprite().getGlobalBounds().intersects(this->tiles[row][col]->getSprite().getGlobalBounds())) {
-	//			//set velocity to 0
-	//			this->pacman.xVelocity = 0;
-
-	//			this->pacman.yVelocity = 0;
-	//		}
-	//	}
-	//}
-
 }
 
-void GameWorld::createFoodRectangles()
-{
-	//std::vector < std::vector<GameTile*>> tiles;
-
-}
+//void GameWorld::createFoodRectangles()
+//{
+//	//std::vector < std::vector<GameTile*>> tiles;
+//
+//}
 
 void GameWorld::updateEating(const sf::RectangleShape& rectA)
-{//std::vector < std::vector<GameTile*>> tiles;
+{
 	sf::RectangleShape tempShape;
 	sf::Vector2f size(40, 40);
-	//size.x = 40; size.y = 40;
 	tempShape.setSize(size);
 	for (int row = 1; row < 20; row++) {
 		for (int col = 0; col < 19; col++) {
@@ -494,22 +467,6 @@ void GameWorld::updateEating(const sf::RectangleShape& rectA)
 		
 	}
 
-	//if (this->pacman.xVelocity != 0 &&
-	//	rectA.getPosition().x + rectA.getSize().x + 3 >= rectB.getPosition().x && //->
-	//	rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x - 3 && //<-
-	//	rectA.getPosition().y + rectA.getSize().y - 3 >= rectB.getPosition().y &&
-	//	rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y + 3
-	//	) {
-	//	this->pacman.xVelocity = 0;
-	//}
-	//else if (this->pacman.yVelocity != 0 &&
-	//	rectA.getPosition().y + rectA.getSize().y + 3 >= rectB.getPosition().y &&
-	//	rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y - 3 &&
-	//	rectA.getPosition().x + rectA.getSize().x - 3 >= rectB.getPosition().x &&
-	//	rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x + 3
-	//	) {
-	//	this->pacman.yVelocity = 0;
-	//}
 }
 
 void GameWorld::update()

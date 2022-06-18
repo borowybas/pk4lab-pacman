@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-
 #ifndef PACMAN_H
 #define PACMAN_H
 
@@ -12,8 +11,6 @@ public:
 	};
 	Direction_e spriteDirection;
 
-	//float speed = 5;
-	//sf::Vector2f velocity;
 	sf::Vector2f position;
 	sf::Sprite pacman_sprite;
 	sf::RectangleShape pacmanCollision;
@@ -25,7 +22,6 @@ public:
 
 	const sf::Sprite& getSprite() const;
 
-	//void initPacman();
 	void update();
 	void updateInput();//strzalki
 	void movePlayer();

@@ -31,9 +31,8 @@ void Pacman::setDirection()
 
 Pacman::Pacman()//init var, init shape, set pos
 {
-	
 		pacman_texture.loadFromFile("C:\\Users\\Admin\\Pictures\\pacman.png");
-		position.x = 60; position.y = 60; //initial position
+		position.x = 60; position.y = 60; 
 		this->pacman_sprite.setTexture(pacman_texture);
 		this->pacman_sprite.setOrigin(20, 20);
 		this->pacman_sprite.setPosition(position);
@@ -41,7 +40,6 @@ Pacman::Pacman()//init var, init shape, set pos
 		this->spriteAngle = 0;
 		sf::Vector2f pacmanSize; pacmanSize.x = 35; pacmanSize.y = 35;
 		this->pacmanCollision.setSize(pacmanSize);
-		//this->pacmanCollision.setOrigin(-20, -20);
 		sf::Vector2f size;
 		size.x = 0; size.y = 40;
 		this->leftTunnel.setSize(size);
@@ -57,10 +55,7 @@ const sf::Sprite& Pacman::getSprite() const
 	return this->pacman_sprite;
 }
 
-Pacman::~Pacman()
-{
-
-}
+Pacman::~Pacman() {}
 
 void Pacman::update()
 {
@@ -87,7 +82,6 @@ void Pacman::updateInput()
 
 		this->yVelocity = 3;
 	}
-	//std::cout << this->xVelocity<<" ";
 	switch (this->spriteDirection) {
 	case LEFT:
 		this->position.x -= this->xVelocity;
@@ -112,82 +106,36 @@ std::counting_semaphore semaphore2(0);
 
 void Pacman::useRightTunnel() {//1
 	semaphore1.acquire();
-	if (/*this->tunnelCollision == 0 &&*/ useTunnel(this->pacmanCollision, this->rightTunnel)) {
+	if (useTunnel(this->pacmanCollision, this->rightTunnel)) {
 		this->tunnelInUsage = 1;
 		this->position.x = leftTunnel.getPosition().x+40;
 		this->position.y = leftTunnel.getPosition().y;
 		this->pacman_sprite.setPosition(position);
-		std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
-		//Sleep(0);
-		//std::this_thread::sleep_for(std::chrono::seconds(5));
 		this->tunnelInUsage = 0;
 	}
-	
 	semaphore2.release();
 }
 
-void Pacman::useLeftTunnel() {//2
+void Pacman::useLeftTunnel() {
 	semaphore1.release();
 	semaphore2.acquire();
-	if (/*this->tunnelCollision == 0 &&*/ useTunnel(this->pacmanCollision, this->leftTunnel)) {
+	if (useTunnel(this->pacmanCollision, this->leftTunnel)) {
 		this->tunnelInUsage = 1;
 		this->position.x = rightTunnel.getPosition().x-40;
 		this->position.y = rightTunnel.getPosition().y;
 		this->pacman_sprite.setPosition(position);
-		std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
-		//std::this_thread::sleep_for(std::chrono::seconds(5));
 		this->tunnelInUsage = 0;
 	}
-	//sleep
-	//std::this_thread::sleep_for(std::chrono::seconds(1));
-	//semaphore.release();
 }
 
 void Pacman::movePlayer()
 {
-		this->pacman_sprite.setPosition(position);
-		//this->useTunnel(this->pacmanCollision, this->leftTunnel);
-		//if (this->useTunnel(this->pacmanCollision, this->leftTunnel)) {
-		//	this->leftTunnelCollision = 1;
-		//	this->rightTunnelCollision = 0;
-		//}
-		//else if (this->useTunnel(this->pacmanCollision, this->rightTunnel)) {
-		//	this->leftTunnelCollision = 0;
-		//	this->rightTunnelCollision = 1;
-		//}
-		//else {
-		//	this->leftTunnelCollision = 0;
-		//	this->rightTunnelCollision = 0;
-		//}
-		
-			std::thread thread1(&Pacman::useLeftTunnel, this);
-			std::thread thread2(&Pacman::useRightTunnel, this);
-
-			thread1.join(); thread2.join();
+	this->pacman_sprite.setPosition(position);
 			
-		
-		//sf::RectangleShape tempShape;
-		
-		//void useLeftTunnel() {
-		//	if (useTunnel(this->pacmanCollision, this->rightTunnel)) {
+	std::thread thread1(&Pacman::useLeftTunnel, this);
+	std::thread thread2(&Pacman::useRightTunnel, this);
 
-		//		this->position.x = leftTunnel.getPosition().x;
-		//		this->position.y = leftTunnel.getPosition().y;
-		//		this->pacman_sprite.setPosition(position);
-		//		std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
-		//		//Sleep(0);
-		//	}
-		//};
-
-		/*if (useTunnel(this->pacmanCollision, this->leftTunnel)) {
-			this->position.x = rightTunnel.getPosition().x;
-			this->position.y = rightTunnel.getPosition().y;
-			this->pacman_sprite.setPosition(position);
-			std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
-		}*/
-		//przechodzenie przez ekran
-		//2*use tunnel
-		
+	thread1.join(); thread2.join();
 }
 
 void Pacman::render(sf::RenderTarget* target)
@@ -197,8 +145,8 @@ void Pacman::render(sf::RenderTarget* target)
 
 bool Pacman::useTunnel(sf::RectangleShape& rectA, sf::RectangleShape& rectB)
 {
-	if (/*this->tunnelInUsage == 0 && */this->tunnelCollision == 0 && rectA.getPosition().x + rectA.getSize().x >= rectB.getPosition().x && //->
-		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x && //<-
+	if (this->tunnelCollision == 0 && rectA.getPosition().x + rectA.getSize().x >= rectB.getPosition().x && 
+		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x &&
 		rectA.getPosition().y + rectA.getSize().y >= rectB.getPosition().y &&
 		rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y) {
 		this->tunnelCollision = 1;
@@ -208,9 +156,4 @@ bool Pacman::useTunnel(sf::RectangleShape& rectA, sf::RectangleShape& rectB)
 		this->tunnelCollision = 0;
 		return false;
 	}
-
 }
-
-
-
-

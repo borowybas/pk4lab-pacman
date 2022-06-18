@@ -7,11 +7,7 @@
 
 class Point : public GameTile{
 public:
-	//bool isPassable;
-	//bool eaten;
-	//sf::Vector2f pos;
-	//sf::Texture tile_texture;
-	//sf::Sprite tile_sprite;
+	
 	Point(std::string s, float a, float b, bool c);
 	//Point();
 	virtual bool setUpSprite(std::string);
