@@ -30,7 +30,13 @@ public:
 	void updateInput();//strzalki
 	void movePlayer();
 	void render(sf::RenderTarget* target);
-
+	sf::RectangleShape leftTunnel;
+	sf::RectangleShape rightTunnel;
+	bool useTunnel(sf::RectangleShape& rectA, sf::RectangleShape& rectB);
+	void useLeftTunnel();
+	void useRightTunnel();
+	bool tunnelCollision;
+	bool tunnelInUsage;
 	float xVelocity = 3;
 	float yVelocity = 3;
 };

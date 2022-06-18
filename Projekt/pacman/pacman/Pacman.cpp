@@ -1,5 +1,9 @@
 #include "Pacman.h"
 #include <iostream>
+#include <thread>
+#include <semaphore>
+#include <barrier>
+#include <chrono>
 void Pacman::setDirection()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -38,6 +42,14 @@ Pacman::Pacman()//init var, init shape, set pos
 		sf::Vector2f pacmanSize; pacmanSize.x = 35; pacmanSize.y = 35;
 		this->pacmanCollision.setSize(pacmanSize);
 		//this->pacmanCollision.setOrigin(-20, -20);
+		sf::Vector2f size;
+		size.x = 0; size.y = 40;
+		this->leftTunnel.setSize(size);
+		this->rightTunnel.setSize(size);
+		this->rightTunnel.setPosition(780+40, 380);
+		this->leftTunnel.setPosition(-20-40, 380);
+		this->tunnelCollision = 0;
+		this->tunnelInUsage = 0;
 }
 
 const sf::Sprite& Pacman::getSprite() const
@@ -95,26 +107,108 @@ void Pacman::updateInput()
 
 	this->pacman_sprite.setRotation(this->spriteAngle);
 }
+std::counting_semaphore semaphore1(0);
+std::counting_semaphore semaphore2(0);
+
+void Pacman::useRightTunnel() {//1
+	semaphore1.acquire();
+	if (/*this->tunnelCollision == 0 &&*/ useTunnel(this->pacmanCollision, this->rightTunnel)) {
+		this->tunnelInUsage = 1;
+		this->position.x = leftTunnel.getPosition().x+40;
+		this->position.y = leftTunnel.getPosition().y;
+		this->pacman_sprite.setPosition(position);
+		std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
+		//Sleep(0);
+		//std::this_thread::sleep_for(std::chrono::seconds(5));
+		this->tunnelInUsage = 0;
+	}
+	
+	semaphore2.release();
+}
+
+void Pacman::useLeftTunnel() {//2
+	semaphore1.release();
+	semaphore2.acquire();
+	if (/*this->tunnelCollision == 0 &&*/ useTunnel(this->pacmanCollision, this->leftTunnel)) {
+		this->tunnelInUsage = 1;
+		this->position.x = rightTunnel.getPosition().x-40;
+		this->position.y = rightTunnel.getPosition().y;
+		this->pacman_sprite.setPosition(position);
+		std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
+		//std::this_thread::sleep_for(std::chrono::seconds(5));
+		this->tunnelInUsage = 0;
+	}
+	//sleep
+	//std::this_thread::sleep_for(std::chrono::seconds(1));
+	//semaphore.release();
+}
 
 void Pacman::movePlayer()
 {
 		this->pacman_sprite.setPosition(position);
-		//przechodzenie przez ekran
-
-		//if (rectA.getPosition().x + rectA.getSize().x + 3 >= rectB.getPosition().x && //->
-		//	rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x - 3 && //<-
-		//	rectA.getPosition().y + rectA.getSize().y - 3 >= rectB.getPosition().y &&
-		//	rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y + 3
-
-		//	) {
-		//	this->pacman.xVelocity = 0;
-		//	//std::cout << "collision x";
+		//this->useTunnel(this->pacmanCollision, this->leftTunnel);
+		//if (this->useTunnel(this->pacmanCollision, this->leftTunnel)) {
+		//	this->leftTunnelCollision = 1;
+		//	this->rightTunnelCollision = 0;
 		//}
+		//else if (this->useTunnel(this->pacmanCollision, this->rightTunnel)) {
+		//	this->leftTunnelCollision = 0;
+		//	this->rightTunnelCollision = 1;
+		//}
+		//else {
+		//	this->leftTunnelCollision = 0;
+		//	this->rightTunnelCollision = 0;
+		//}
+		
+			std::thread thread1(&Pacman::useLeftTunnel, this);
+			std::thread thread2(&Pacman::useRightTunnel, this);
+
+			thread1.join(); thread2.join();
+			
+		
+		//sf::RectangleShape tempShape;
+		
+		//void useLeftTunnel() {
+		//	if (useTunnel(this->pacmanCollision, this->rightTunnel)) {
+
+		//		this->position.x = leftTunnel.getPosition().x;
+		//		this->position.y = leftTunnel.getPosition().y;
+		//		this->pacman_sprite.setPosition(position);
+		//		std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
+		//		//Sleep(0);
+		//	}
+		//};
+
+		/*if (useTunnel(this->pacmanCollision, this->leftTunnel)) {
+			this->position.x = rightTunnel.getPosition().x;
+			this->position.y = rightTunnel.getPosition().y;
+			this->pacman_sprite.setPosition(position);
+			std::cout << pacman_sprite.getPosition().x << " " << pacman_sprite.getPosition().y << std::endl;
+		}*/
+		//przechodzenie przez ekran
+		//2*use tunnel
+		
 }
 
 void Pacman::render(sf::RenderTarget* target)
 {
 	target->draw(this->pacman_sprite);
+}
+
+bool Pacman::useTunnel(sf::RectangleShape& rectA, sf::RectangleShape& rectB)
+{
+	if (/*this->tunnelInUsage == 0 && */this->tunnelCollision == 0 && rectA.getPosition().x + rectA.getSize().x >= rectB.getPosition().x && //->
+		rectB.getPosition().x + rectB.getSize().x >= rectA.getPosition().x && //<-
+		rectA.getPosition().y + rectA.getSize().y >= rectB.getPosition().y &&
+		rectB.getPosition().y + rectB.getSize().y >= rectA.getPosition().y) {
+		this->tunnelCollision = 1;
+		return true;
+	}
+	else {
+		this->tunnelCollision = 0;
+		return false;
+	}
+
 }
 
 

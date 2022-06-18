@@ -109,19 +109,16 @@ GameWorld::GameWorld() {
 	this->initVariables();
 	this->initWindow();
 
-	//gridLength = 19;
-	//gridHeight = 21;
+
 	setUpInitialState();
 	setUpTiles();
 	drawTiles();
 	this->window->setFramerateLimit(60);
-	//setMapColPos();
+
 	setUpCollisionVector();
 	font.loadFromFile("C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\joystix monospace.ttf");
 	this->text.setFont(this->font);
-	/*int i = 10;
-	std::string str = std::to_string(i);
-	text.setString(str);*/
+
 	std::string str = std::to_string(this->score);
 		text.setString(str);
 }
