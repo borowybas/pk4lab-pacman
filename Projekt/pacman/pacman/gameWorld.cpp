@@ -2,100 +2,13 @@
 #include <iostream>
 #include <thread>
 #include <regex>
-#include <vector>
-#include <chrono>
-
-void GameWorld::setUpInitialState() {
-	pacmanPos = sf::Vector2i(0, 0);
-}
-
-void GameWorld::setUpTiles() {
-	tiles.clear();
-	//////// y   x
-	const int arr[21][19] = {
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },//
-		{ 0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0 },//
-		{ 0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0 },//
-		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },//
-		{ 0,1,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,1,0 },//
-		{ 0,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,0 },//6
-		{ 0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0 },//
-		{ 1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1 },//
-		{ 0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0 },//9
-		{ 1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1 },//
-		{ 0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0 },//11
-		{ 1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1 },//12
-		{ 0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0 },//13
-		{ 0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0 },//
-		{ 0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0 },//15
-		{ 0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0 },//16
-		{ 0,0,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,0,0 },//
-		{ 0,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,0 },//
-		{ 0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0 },//
-		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },
-		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
-	};
-	std::string bluePath;
-	std::string pointPath;
-	std::string blackPath;
-	this->path = "C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images";
-	std::regex blueReg("blueT[a-zA-Z]+", std::regex_constants::icase);
-	std::regex blackReg("bla[a-zA-Z]+", std::regex_constants::icase);
-	std::regex pointReg("p[a-zA-Z]+", std::regex_constants::icase);
-	
-	for (auto& p1 : std::filesystem::directory_iterator(this->path)) {
-		if (std::regex_match(p1.path().stem().string(), blueReg)) {
-			bluePath = p1.path().string();
-		}
-		else if (std::regex_match(p1.path().stem().string(), blackReg)) {
-			blackPath = p1.path().string();
-		}
-		else if (std::regex_match(p1.path().stem().string(), pointReg)) {
-			pointPath = p1.path().string();
-		}
-	}
-
-	for (int row = 0; row < 21; row++) {
-		std::vector<GameTile* > wholeRow;
-		int y = row * 40;
-		for (int col = 0; col < 19; col++) {
-			int x = col * 40;
-
-			if (arr[row][col] == 0) {
-				wholeRow.push_back(new GameTile(bluePath, x, y, false));
-			}
-			else if (arr[row][col] == 1) {
-				wholeRow.push_back(new Point(pointPath, x, y, true));
-			}
-		}
-		tiles.push_back(wholeRow);
-	}
-}
-
-void GameWorld::drawTiles()
-{
-	for (int i = 0; i < 21; i++) {
-		for (int j = 0; j < 19; j++) {
-			if(this->tiles[i][j]->eaten == false)
-				this->window->draw(this->tiles[i][j]->tile_sprite);
-		}
-	}
-}
-
-void GameWorld::initVariables() {
-	this->endGame = false;
-}
-
-void GameWorld::initWindow() {
-	this->videomode = sf::VideoMode(760, 840);
-	this->window = new sf::RenderWindow (this->videomode, "Pac-Man", sf::Style::Close | sf::Style::Titlebar);
-}
+//#include <vector>
+//#include <chrono>
 
 GameWorld::GameWorld() {
-	this->initVariables();
 	this->initWindow();
 
-	setUpInitialState();
+	this->path = "C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images";
 	setUpTiles();
 	drawTiles();
 	this->window->setFramerateLimit(60);
@@ -126,11 +39,77 @@ GameWorld::~GameWorld() {
 	delete this->window;
 }
 
-void GameWorld::pollEvents()
+void GameWorld::initWindow() {
+	this->videomode = sf::VideoMode(760, 840);
+	this->window = new sf::RenderWindow(this->videomode, "Pac-Man", sf::Style::Close | sf::Style::Titlebar);
+}
+
+void GameWorld::setUpTiles() {
+	tiles.clear();
+	//////// y   x
+	const int arr[21][19] = {
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },//
+		{ 0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0 },//
+		{ 0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0 },//
+		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },//
+		{ 0,1,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,1,0 },//
+		{ 0,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,0 },//6
+		{ 0,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0 },//
+		{ 1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1 },//
+		{ 0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0 },//9
+		{ 1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1 },//
+		{ 0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0 },//11
+		{ 1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1 },//12
+		{ 0,0,0,0,1,0,1,0,0,0,0,0,1,0,1,0,0,0,0 },//13
+		{ 0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0 },//
+		{ 0,1,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,1,0 },//15
+		{ 0,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0 },//16
+		{ 0,0,1,0,1,0,1,0,0,0,0,0,1,0,1,0,1,0,0 },//
+		{ 0,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,0 },//
+		{ 0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0 },//
+		{ 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0 },
+		{ 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+	};
+	std::string bluePath;	std::string pointPath;	std::string blackPath;
+
+	std::regex blueReg("blueT[a-zA-Z]+", std::regex_constants::icase);
+	std::regex blackReg("bla[a-zA-Z]+", std::regex_constants::icase);
+	std::regex pointReg("p[a-zA-Z]+", std::regex_constants::icase);
+	
+	for (auto& p1 : std::filesystem::directory_iterator(this->path)) {
+		if (std::regex_match(p1.path().stem().string(), blueReg)) {
+			bluePath = p1.path().string();
+		}
+		else if (std::regex_match(p1.path().stem().string(), blackReg)) {
+			blackPath = p1.path().string();
+		}
+		else if (std::regex_match(p1.path().stem().string(), pointReg)) {
+			pointPath = p1.path().string();
+		}
+	}
+
+	for (int row = 0; row < 21; row++) {
+		std::vector<GameTile* > wholeRow;
+		int y = row * 40;
+		for (int col = 0; col < 19; col++) {
+			int x = col * 40;
+			if (arr[row][col] == 0) {
+				wholeRow.push_back(new GameTile(bluePath, x, y));
+			}
+			else if (arr[row][col] == 1) {
+				wholeRow.push_back(new Point(pointPath, x, y));
+			}
+		}
+		tiles.push_back(wholeRow);
+	}
+}
+
+void GameWorld::drawTiles()
 {
-	while (this->window->pollEvent(this->myEvent)) {
-		if (this->myEvent.type == sf::Event::Closed ) {//
-			this->window->close();
+	for (int i = 0; i < 21; i++) {
+		for (int j = 0; j < 19; j++) {
+			if(this->tiles[i][j]->eaten == false)
+				this->window->draw(this->tiles[i][j]->tile_sprite);
 		}
 	}
 }
@@ -271,7 +250,6 @@ void GameWorld::setMapColPos()
 	colElements1.push_back(tempShape);
 	
 }
-
 void GameWorld::setMapColPos2()
 {
 	sf::RectangleShape tempShape;
@@ -420,8 +398,60 @@ void GameWorld::setUpCollisionVector()
 
 	th1.join(); th2.join();
 	colElements1.insert(colElements1.end(), colElements2.begin(), colElements2.end());
-
 }
+
+void GameWorld::pollEvents()
+{
+	while (this->window->pollEvent(this->myEvent)) {
+		if (this->myEvent.type == sf::Event::Closed) {//
+			this->window->close();
+		}
+	}
+}
+
+void GameWorld::render()
+{
+	this->window->clear();
+	this->drawTiles();
+	this->pacman.render(this->window);
+	for (int i = 0; i < ghostVec.size(); i++) {
+		this->ghostVec[i]->render(this->window);
+	}
+	this->window->draw(text);
+	this->window->draw(endText);
+	this->window->display();
+}
+
+void GameWorld::update()
+{
+	this->pollEvents();
+
+	if (this->runing()) {
+		if (this->pacman.isAlive == 1 && this->score < 1850) {
+			for (int i = 0; i <= colElements1.size(); i++) {
+				this->updateCollision(this->pacman.pacmanCollision, this->colElements1[i]);
+			}
+			this->updatePlayers();
+			this->updateEating(this->pacman.pacmanCollision);
+			this->updateDisplayScore();
+			for (int i = 0; i < ghostVec.size(); i++) {
+				this->updatePacGhostCollision(this->pacman.pacmanCollision, this->ghostVec[i]->ghostCollision);
+			}
+		}
+		else {
+			this->displayEndState(this->pacman.isAlive);
+		}
+	}
+}
+
+void GameWorld::updatePlayers()
+{
+	this->pacman.update();
+	for (int i = 0; i < ghostVec.size(); i++) {
+		this->ghostVec[i]->updateGhost();
+	}
+}
+
 void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB)
 {
 	if ( this->pacman.xVelocity != 0 && 
@@ -442,8 +472,6 @@ void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::Recta
 	}
 }
 
-
-
 void GameWorld::updateEating(const sf::RectangleShape& rectA)
 {
 	sf::RectangleShape tempShape;
@@ -451,12 +479,10 @@ void GameWorld::updateEating(const sf::RectangleShape& rectA)
 	tempShape.setSize(size);
 	for (int row = 1; row < 20; row++) {
 		for (int col = 0; col < 19; col++) {
-			
 			if (this->tiles[row][col]->isFood && this->tiles[row][col]->eaten == false) {//jeœli jest niezjedzonym jedzeniem
 				tempShape.setPosition(col*40 + 20, row*40 + 20);
 				foodRectangles.push_back(tempShape);
 				//sprawdŸ kolizjê
-
 				if (rectA.getPosition().x + rectA.getSize().x - 20>= tempShape.getPosition().x && //->
 					tempShape.getPosition().x + tempShape.getSize().x >= rectA.getPosition().x + 20&& //<-
 					rectA.getPosition().y + rectA.getSize().y - 20>= tempShape.getPosition().y &&
@@ -468,65 +494,6 @@ void GameWorld::updateEating(const sf::RectangleShape& rectA)
 			}
 		}
 	}
-}
-
-void GameWorld::update()
-{
-	this->pollEvents();//do zamkniecia
-
-	if (this->runing()) {//(this->endGame == false
-		
-		//{int offset_x = 0;
-		//int offset_y = 0;
-		//if (lewo)
-		//	offset_x = -3;
-		//if (prawo)
-		//	offset_x = 3;
-		//if (gora)
-		//	offset_y = -3;
-		//if (dol)
-		//	offset_y = 3;
-
-		//sf::RectangleShape nextPosition;
-		//nextPosition.setPosition(this->pacman.pacmanCollision.getPosition().x + offset_x, this->pacman.pacmanCollision.getPosition().y + offset_y);}
-		//this->updateCollision(nextPosition, this->mapColEl1);
-		if (this->pacman.isAlive == 1 && this->score<1850) {
-			for (int i = 0; i <= colElements1.size(); i++) {
-				this->updateCollision(this->pacman.pacmanCollision, this->colElements1[i]);
-			}
-			this->updatePlayer();
-			this->updateEating(this->pacman.pacmanCollision);
-			this->updateDisplayScore();
-			for (int i = 0; i < ghostVec.size(); i++) {
-				this->updatePacGhostCollision(this->pacman.pacmanCollision, this->ghostVec[i]->ghostCollision);
-			}
-		}
-		else {
-			this->displayEndState(this->pacman.isAlive);
-		}
-	}
-}
-
-void GameWorld::updatePlayer()
-{
-	this->pacman.update();
-	for (int i = 0; i < ghostVec.size(); i++) {
-		this->ghostVec[i]->updateGhost();
-	}
-}
-
-void GameWorld::render()
-{
-	this->window->clear();
-	this->drawTiles();
-	this->pacman.render(this->window);
-	for (int i = 0; i < ghostVec.size(); i++) {
-		this->ghostVec[i]->render(this->window);
-	}
-	
-	this->window->draw(text);
-	this->window->draw(endText);
-	this->window->display();
 }
 
 void GameWorld::updateDisplayScore()

@@ -1,14 +1,12 @@
 #include "gameTile.h"
 
-GameTile::GameTile(std::string textureName, float x, float y, bool passable) {
+GameTile::GameTile(std::string textureName, int x, int y) {
     if (setUpSprite(textureName)) {
         pos = sf::Vector2f(x, y);
         tile_sprite.setPosition(pos);
-        isPassable = passable;
         this->isFood = false;
         this->eaten = false;
     }
-        
 }
 
 bool GameTile::setUpSprite(std::string textureName) {
@@ -18,9 +16,4 @@ bool GameTile::setUpSprite(std::string textureName) {
         return true;
     }
     return false;
-}
-
-const sf::Sprite& GameTile::getSprite() const
-{
-    return this->tile_sprite;
 }

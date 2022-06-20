@@ -2,30 +2,27 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
+
 #ifndef GHOST_H
 #define GHOST_H
 
 class Ghost {
 public:
+	std::vector<sf::Vector2f> moveVector;
+	sf::Vector2f position;
+	sf::RectangleShape ghostCollision;
+	sf::Sprite ghost_sprite;
+	sf::Texture ghost_texture;
 
 	Ghost(int posX, int posY);
 	~Ghost() {};
-	//?virtual bool setUpSprite(std::string);
-	std::vector<sf::Vector2f> moveVector;
-	sf::Vector2f position;
-	sf::Sprite ghost_sprite;
-	sf::RectangleShape ghostCollision;
-	sf::Texture ghost_texture;
-	//sf::RectangleShape ghostCollision;
 
 	void moveGhost(std::vector<sf::Vector2f>& moveVector);
 	void updateGhost();
-	virtual void loadTexture() = 0;
 	void render(sf::RenderTarget* target);
-	virtual void setUpMoveVector() = 0;
 
-	/*void moveHorizontally(int offset);
-	void moveVertically(int offset);*/
+	virtual void loadTexture() = 0;
+	virtual void setUpMoveVector() = 0;
 };
 
 #endif

@@ -8,7 +8,6 @@
 
 int main()
 {
-
     GameWorld Game;
 
     while (Game.runing()) {

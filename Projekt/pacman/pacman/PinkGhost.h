@@ -2,8 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include "Ghost.h"
 #include <string>
+
 #ifndef PINKGHOST_H
 #define PINKGHOST_H
+
 class PinkGhost : public Ghost {
 public:
 	PinkGhost();
@@ -12,4 +14,4 @@ public:
 	virtual void setUpMoveVector();
 };
 
-#endif#pragma once
+#endif
