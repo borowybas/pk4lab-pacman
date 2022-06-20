@@ -8,7 +8,9 @@ Ghost::Ghost(int posX, int posY)
 	this->ghost_sprite.setPosition(position);
 	this->ghost_sprite.setOrigin(20, 20);
 	
-	
+	this->ghostCollision.setPosition(position);
+	this->ghostCollision.setOrigin(20, 20);
+	this->ghostCollision.setSize(sf::Vector2f(40, 40));
 }
 
 void Ghost::moveGhost(std::vector<sf::Vector2f>& moveVector)
@@ -55,6 +57,7 @@ void Ghost::moveGhost(std::vector<sf::Vector2f>& moveVector)
 void Ghost::updateGhost()
 {
 	this->moveGhost(this->moveVector);
+	ghostCollision.setPosition(this->position);
 	//this->ghost_sprite.setPosition(this->position);
 }
 

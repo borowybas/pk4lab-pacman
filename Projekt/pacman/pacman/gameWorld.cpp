@@ -121,7 +121,7 @@ GameWorld::~GameWorld() {
 void GameWorld::pollEvents()
 {
 	while (this->window->pollEvent(this->myEvent)) {
-		if (this->myEvent.type == sf::Event::Closed) {
+		if (this->myEvent.type == sf::Event::Closed /*|| this->pacman.isAlive == 0*/) {//
 			this->window->close();
 		}
 	}
@@ -434,11 +434,7 @@ void GameWorld::updateCollision(const sf::RectangleShape& rectA, const sf::Recta
 	}
 }
 
-//void GameWorld::createFoodRectangles()
-//{
-//	//std::vector < std::vector<GameTile*>> tiles;
-//
-//}
+
 
 void GameWorld::updateEating(const sf::RectangleShape& rectA)
 {
@@ -461,12 +457,9 @@ void GameWorld::updateEating(const sf::RectangleShape& rectA)
 					this->tiles[row][col]->eaten = true;
 					this->score += 10;
 				}
-
 			}
 		}
-		
 	}
-
 }
 
 void GameWorld::update()
@@ -493,9 +486,9 @@ void GameWorld::update()
 			this->updateCollision(this->pacman.pacmanCollision, this->colElements1[i]);
 		}
 		this->updatePlayer();
-		this->updateEating(this->pacman.pacmanCollision);//update eating
-		//update score
+		this->updateEating(this->pacman.pacmanCollision);
 		this->updateDisplayScore();
+		this->updatePacGhostCollision(this->pacman.pacmanCollision, this->redGhost.ghostCollision);
 	}
 }
 
@@ -522,4 +515,16 @@ void GameWorld::updateDisplayScore()
 {
 	std::string str = std::to_string(this->score);
 	text.setString(str);
+}
+
+void GameWorld::updatePacGhostCollision(const sf::RectangleShape& tempPacShape, const sf::RectangleShape& tempGhostShape){
+	if (tempPacShape.getPosition().x + tempPacShape.getSize().x >= tempGhostShape.getPosition().x && //->
+		tempGhostShape.getPosition().x + tempGhostShape.getSize().x >= tempPacShape.getPosition().x && //<-
+		tempPacShape.getPosition().y + tempPacShape.getSize().y >= tempGhostShape.getPosition().y &&
+		tempGhostShape.getPosition().y + tempGhostShape.getSize().y >= tempPacShape.getPosition().y
+		) {
+		this->pacman.isAlive = 0;
+		std::cout << "kolizja";
+		this->window->close();
+	}
 }

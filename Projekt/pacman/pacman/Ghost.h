@@ -16,6 +16,7 @@ public:
 	sf::Sprite ghost_sprite;
 	sf::RectangleShape ghostCollision;
 	sf::Texture ghost_texture;
+	//sf::RectangleShape ghostCollision;
 
 	void moveGhost(std::vector<sf::Vector2f>& moveVector);
 	void updateGhost();

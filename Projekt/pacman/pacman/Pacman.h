@@ -35,6 +35,7 @@ public:
 	bool tunnelInUsage;
 	float xVelocity = 3;
 	float yVelocity = 3;
+	bool isAlive;
 };
 
 #endif

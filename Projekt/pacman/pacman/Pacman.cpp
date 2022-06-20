@@ -48,6 +48,7 @@ Pacman::Pacman()//init var, init shape, set pos
 		this->leftTunnel.setPosition(-20-40, 380);
 		this->tunnelCollision = 0;
 		this->tunnelInUsage = 0;
+		this->isAlive = 1;
 }
 
 const sf::Sprite& Pacman::getSprite() const

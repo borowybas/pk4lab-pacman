@@ -52,6 +52,7 @@ public:
 	sf::Text text;
 	std::filesystem::path path;
 	void updateDisplayScore();
+	void updatePacGhostCollision(const sf::RectangleShape& tempPacShape, const sf::RectangleShape& tempGhostShape);
 };
 
 #endif
