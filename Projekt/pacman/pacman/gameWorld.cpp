@@ -502,6 +502,7 @@ void GameWorld::update()
 void GameWorld::updatePlayer()
 {
 	this->pacman.update();
+	this->redGhost.updateGhost();
 }
 
 void GameWorld::render()
@@ -511,6 +512,7 @@ void GameWorld::render()
 	//render
 	this->drawTiles();
 	this->pacman.render(this->window);
+	this->redGhost.render(this->window);
 	this->window->draw(text);
 
 	this->window->display();

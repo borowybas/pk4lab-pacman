@@ -3,6 +3,8 @@
 
 #include "gameTile.h"
 #include "Pacman.h"
+//#include "Ghost.h"
+#include "RedGhost.h"
 #include <vector>
 #include "Point.h"
 #include <atomic>
@@ -37,6 +39,7 @@ public:
 	void setMapColPos2();
 	void setUpCollisionVector();
 	Pacman pacman;
+	RedGhost redGhost;
 	void updateCollision(const sf::RectangleShape& rectA, const sf::RectangleShape& rectB);
 	std::vector<sf::RectangleShape> foodRectangles;
 	std::atomic<int> score = 0;
