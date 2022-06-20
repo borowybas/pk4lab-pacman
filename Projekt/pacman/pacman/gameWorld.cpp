@@ -39,7 +39,7 @@ void GameWorld::setUpTiles() {
 	std::string pointPath;
 	std::string blackPath;
 	this->path = "C:\\Users\\Admin\\Documents\\GitHub\\a87312ac-gr41-repo\\Projekt\\pacman\\images";
-	std::regex blueReg("blu[a-zA-Z]+", std::regex_constants::icase);
+	std::regex blueReg("blueT[a-zA-Z]+", std::regex_constants::icase);
 	std::regex blackReg("bla[a-zA-Z]+", std::regex_constants::icase);
 	std::regex pointReg("p[a-zA-Z]+", std::regex_constants::icase);
 	
@@ -105,7 +105,12 @@ GameWorld::GameWorld() {
 	this->text.setFont(this->font);
 
 	std::string str = std::to_string(this->score);
-		text.setString(str);
+	text.setString(str);
+
+	this->ghostVec.push_back(new RedGhost);
+	this->ghostVec.push_back(new BlueGhost);
+	this->ghostVec.push_back(new OrangeGhost);
+	this->ghostVec.push_back(new PinkGhost);
 }
 
 GameWorld::~GameWorld() {
@@ -114,6 +119,9 @@ GameWorld::~GameWorld() {
 			delete element;
 		}
 	}
+	for (Ghost* ghost : this->ghostVec) {
+		delete ghost;
+	}
 	this->tiles.clear();
 	delete this->window;
 }
@@ -121,7 +129,7 @@ GameWorld::~GameWorld() {
 void GameWorld::pollEvents()
 {
 	while (this->window->pollEvent(this->myEvent)) {
-		if (this->myEvent.type == sf::Event::Closed /*|| this->pacman.isAlive == 0*/) {//
+		if (this->myEvent.type == sf::Event::Closed ) {//
 			this->window->close();
 		}
 	}
@@ -467,7 +475,8 @@ void GameWorld::update()
 	this->pollEvents();//do zamkniecia
 
 	if (this->runing()) {//(this->endGame == false
-		//int offset_x = 0;
+		
+		//{int offset_x = 0;
 		//int offset_y = 0;
 		//if (lewo)
 		//	offset_x = -3;
@@ -479,35 +488,44 @@ void GameWorld::update()
 		//	offset_y = 3;
 
 		//sf::RectangleShape nextPosition;
-		//nextPosition.setPosition(this->pacman.pacmanCollision.getPosition().x + offset_x, this->pacman.pacmanCollision.getPosition().y + offset_y);
+		//nextPosition.setPosition(this->pacman.pacmanCollision.getPosition().x + offset_x, this->pacman.pacmanCollision.getPosition().y + offset_y);}
 		//this->updateCollision(nextPosition, this->mapColEl1);
-
-		for (int i = 0; i <= colElements1.size(); i++) {
-			this->updateCollision(this->pacman.pacmanCollision, this->colElements1[i]);
+		if (this->pacman.isAlive == 1 && this->score<1850) {
+			for (int i = 0; i <= colElements1.size(); i++) {
+				this->updateCollision(this->pacman.pacmanCollision, this->colElements1[i]);
+			}
+			this->updatePlayer();
+			this->updateEating(this->pacman.pacmanCollision);
+			this->updateDisplayScore();
+			for (int i = 0; i < ghostVec.size(); i++) {
+				this->updatePacGhostCollision(this->pacman.pacmanCollision, this->ghostVec[i]->ghostCollision);
+			}
 		}
-		this->updatePlayer();
-		this->updateEating(this->pacman.pacmanCollision);
-		this->updateDisplayScore();
-		this->updatePacGhostCollision(this->pacman.pacmanCollision, this->redGhost.ghostCollision);
+		else {
+			this->displayEndState(this->pacman.isAlive);
+		}
 	}
 }
 
 void GameWorld::updatePlayer()
 {
 	this->pacman.update();
-	this->redGhost.updateGhost();
+	for (int i = 0; i < ghostVec.size(); i++) {
+		this->ghostVec[i]->updateGhost();
+	}
 }
 
 void GameWorld::render()
 {
 	this->window->clear();
-
-	//render
 	this->drawTiles();
 	this->pacman.render(this->window);
-	this->redGhost.render(this->window);
+	for (int i = 0; i < ghostVec.size(); i++) {
+		this->ghostVec[i]->render(this->window);
+	}
+	
 	this->window->draw(text);
-
+	this->window->draw(endText);
 	this->window->display();
 }
 
@@ -524,7 +542,18 @@ void GameWorld::updatePacGhostCollision(const sf::RectangleShape& tempPacShape, 
 		tempGhostShape.getPosition().y + tempGhostShape.getSize().y >= tempPacShape.getPosition().y
 		) {
 		this->pacman.isAlive = 0;
-		std::cout << "kolizja";
-		this->window->close();
+	}
+}
+
+void GameWorld::displayEndState(bool pacState)//nie zyje
+{
+	this->endText.setFont(this->font);
+	this->endText.setCharacterSize(50);
+	this->endText.setPosition(sf::Vector2f(220, 300));
+	if (pacState == 0) {
+		endText.setString("YOU DIED");
+	}
+	else {
+		endText.setString("YOU WON");
 	}
 }
