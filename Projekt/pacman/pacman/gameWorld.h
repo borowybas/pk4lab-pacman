@@ -58,9 +58,7 @@ public:
 	void updatePacGhostCollision(const sf::RectangleShape& tempPacShape, const sf::RectangleShape& tempGhostShape);
 	
 	void displayEndState(bool pacState);
-
 	const bool runing() const { return this->window->isOpen(); };
-	
 };
 
 #endif

@@ -2,8 +2,6 @@
 #include <iostream>
 #include <thread>
 #include <regex>
-//#include <vector>
-//#include <chrono>
 
 GameWorld::GameWorld() {
 	this->initWindow();
