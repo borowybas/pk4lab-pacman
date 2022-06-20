@@ -18,19 +18,32 @@ void Ghost::moveGhost(std::vector<sf::Vector2f>& moveVector)
 	for (int i = 0; flag == 0; i++) {
 		
 
-		if (moveVector[i].x != 0) {//tutaj wywo³amy funkcjê która bêdzie setowaæ pozycjê co 3 dopóki x!=0 //czy bêdzie dzialaæ? xd nie wiem
+		if (moveVector[i].x > 0) {//tutaj wywo³amy funkcjê która bêdzie setowaæ pozycjê co 3 dopóki x!=0 //prawo
 			
 			this->position.x += 1;
 			this->ghost_sprite.setPosition(this->position);
 			moveVector[i].x -= 1;
 			flag = 1;
 		}
-		else if(moveVector[i].y != 0) {
+		else if (moveVector[i].x < 0) { //lewo
+			this->position.x -= 1;
+			this->ghost_sprite.setPosition(this->position);
+			moveVector[i].x += 1;
+			flag = 1;
+
+		}
+		else if(moveVector[i].y > 0) { //dó³
 			this->position.y += 1;
 			this->ghost_sprite.setPosition(this->position);
 			moveVector[i].y -= 1;
 			flag = 1;
-			
+		}
+		else if (moveVector[i].y < 0) { //góra
+			this->position.y -= 1;
+			this->ghost_sprite.setPosition(this->position);
+			moveVector[i].y += 1;
+			flag = 1;
+
 		}
 		if (i == moveVector.size()) {
 			this->setUpMoveVector();
